@@ -1,0 +1,7 @@
+[
+{
+  "directory": "/home/ziaad/code/c++-web-scraper/build",
+  "command": "/usr/bin/g++ -DCURL_STATICLIB -DLIBXML_STATIC -isystem /home/ziaad/vcpkg/installed/x64-linux/include -isystem /home/ziaad/vcpkg/installed/x64-linux/include/libxml2 -std=c++17 -o CMakeFiles/scraper.dir/scraper.cpp.o -c /home/ziaad/code/c++-web-scraper/scraper.cpp",
+  "file": "/home/ziaad/code/c++-web-scraper/scraper.cpp"
+}
+]
