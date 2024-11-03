@@ -58,7 +58,15 @@ htmlDocPtr RetrieveHTMLPage(void) {
 }
 
 std::string getNodeContent(xmlNodePtr node) {
-    xmlChar* content = xmlNodeGetContent(node);
+    if (node == NULL) {
+        return "";
+    }
+    xmlChar* content = NULL;
+    if (node->type == XML_ATTRIBUTE_NODE) {
+        content = xmlNodeListGetString(node->doc, node->children, 1);
+    } else {
+        content = xmlNodeGetContent(node);
+    }
     if (content == NULL) {
         return "";
     }
@@ -67,7 +75,104 @@ std::string getNodeContent(xmlNodePtr node) {
     return result;
 }
 
-void ProcessNodes(xmlXPathObjectPtr Objects) {
+/* Debug function to inspect the structure.
+ */
+void PrintNodeAttributes(xmlNodePtr node, int depth = 0) {
+    if (node == NULL) {
+        return;
+    }
+
+    // Indentation for readability
+    std::string indent(depth * 2, ' ');
+
+    // Print node name
+    std::cout << indent << "Node Name: " << node->name << std::endl;
+
+    // Print node attributes
+    for (xmlAttrPtr attr = node->properties; attr != NULL; attr = attr->next) {
+        xmlChar* value = xmlNodeListGetString(node->doc, attr->children, 1);
+        std::cout << indent << "  Attribute: " << attr->name << " = " << value
+                  << std::endl;
+        xmlFree(value);
+    }
+
+    // Optionally, print node content if it's a text node
+    if (node->type == XML_TEXT_NODE) {
+        xmlChar* content = xmlNodeGetContent(node);
+        if (content != NULL && xmlStrlen(content) > 0) {
+            std::cout << indent << "  Content: " << content << std::endl;
+            xmlFree(content);
+        }
+    }
+
+    // Recursively print child nodes
+    for (xmlNodePtr child = node->children; child != NULL;
+         child = child->next) {
+        PrintNodeAttributes(child, depth + 1);
+    }
+}
+
+void ProcessIndividual_Node(xmlNodePtr node, htmlDocPtr doc) {
+    // We create a new context to query the node that matched our first search
+    // in XMLParsed.
+
+    xmlXPathContextPtr context = xmlXPathNewContext(doc);
+    if (context == NULL) {
+        std::cerr << "Couldn't create a context" << std::endl;
+        return;
+    }
+
+    // context node is current node.
+    context->node = node;
+
+    // XPath to extract the product name from the 'title' attribute of the <a>
+    // tag
+    std::string nameXPath = ".//a/@title";
+
+    // XPath to extract the price from the 'aria-label' attribute of the <span>
+    // with class 'sr-only'
+    std::string priceXPath = ".//span[@class='sr-only']/@aria-label";
+
+    // Evaluate the XPath expression.
+    xmlXPathObjectPtr nameNodes = xmlXPathEvalExpression(
+        reinterpret_cast<const xmlChar*>(nameXPath.c_str()), context);
+
+    std::string ProductName = "N/A";
+    if (nameNodes != NULL && nameNodes->nodesetval->nodeNr > 0) {
+        xmlNodePtr nameNode = nameNodes->nodesetval->nodeTab[0];
+        ProductName = getNodeContent(nameNode);
+
+        // Remove the 'Bekijk'
+        const std::string prefix = "Bekijk ";
+        if (ProductName.compare(0, prefix.size(), prefix) == 0) {
+            ProductName = ProductName.substr(prefix.size());
+        }
+    }
+    xmlXPathFreeObject(nameNodes);
+
+    // Evaluate the price XPath expression
+    xmlXPathObjectPtr priceNodes = xmlXPathEvalExpression(
+        reinterpret_cast<const xmlChar*>(priceXPath.c_str()), context);
+
+    std::string productPrice = "N/A";
+    if (priceNodes != NULL && priceNodes->nodesetval->nodeNr > 0) {
+        xmlNodePtr priceAttrNode = priceNodes->nodesetval->nodeTab[0];
+        productPrice = getNodeContent(priceAttrNode);
+        // Remove 'Prijs: ' prefix
+        const std::string prefix = "Prijs: ";
+        if (productPrice.compare(0, prefix.size(), prefix) == 0) {
+            productPrice = productPrice.substr(prefix.size());
+        }
+    }
+    xmlXPathFreeObject(priceNodes);
+
+    // Clean up the XPath context
+    xmlXPathFreeContext(context);
+
+    std::cout << ProductName << "   " << productPrice << std::endl;
+}
+
+void ProcessNodes(xmlXPathObjectPtr Objects, htmlDocPtr doc) {
     // A pointer to the set of corresponding nodes.
     xmlNodeSetPtr CorrespondingNodes = Objects->nodesetval;
 
@@ -78,9 +183,9 @@ void ProcessNodes(xmlXPathObjectPtr Objects) {
     for (int i = 0; i < CorrespondingNodes->nodeNr; i++) {
         xmlNodePtr node = CorrespondingNodes->nodeTab[i];
         if (node != NULL) {
-            std::cout << getNodeContent(node)
-                      << std::endl;  // If i don't end up here then the node's
-                                     // memory won't get freed. Potential leak.
+            ProcessIndividual_Node(
+                node, doc);  // If i don't end up here then the node's
+                             // memory won't get freed. Potential leak.
         }
     }
 }
@@ -96,10 +201,13 @@ int XMLParsed(htmlDocPtr doc) {
     }
 
     // We use std::string as we want the safety benefits of this i.e const char*
+    // std::string xpathExpr =
+    //     "//*[contains(@class, 'line-clamp_root__7DevG "
+    //     "line-clamp_active__5Qc2L "
+    //     "title_lineclamp__kjrFA')]";
+
     std::string xpathExpr =
-        "//*[contains(@class, 'line-clamp_root__7DevG "
-        "line-clamp_active__5Qc2L "
-        "title_lineclamp__kjrFA')]";
+        "//*[contains(@class, 'product-card-portrait_root__ZiRpZ')]";
 
     // xpathObj contains the node that match the query
     xmlXPathObjectPtr xpathObj = xmlXPathEvalExpression(
@@ -111,7 +219,7 @@ int XMLParsed(htmlDocPtr doc) {
         xmlFreeDoc(doc);
         return -1;
     }
-    ProcessNodes(xpathObj);
+    ProcessNodes(xpathObj, doc);
 
     // free the Xpath object after processing
     xmlXPathFreeObject(xpathObj);
@@ -121,6 +229,7 @@ int XMLParsed(htmlDocPtr doc) {
 
     // Free the document
     xmlFreeDoc(doc);
+    return 0;
 }
 
 void Retrieve_And_Initalize_Data(void) {
