@@ -9,6 +9,12 @@
 #include <vector>
 
 #define BASE_URL "https://www.ah.nl/shop/prijsfavorieten"
+#define PREFIX "https://www.ah.nl"
+
+#define PRODUCT_MASTER_DIV "product-card-portrait_root__ZiRpZ"
+#define NAME_PATH ".//a/@title"
+#define PRICE_PATH ".//span[@class='sr-only']/@aria-label"
+#define LINK_PATH ".//a/@href"
 
 // Main div: product-card-portrait_root__ZiRpZ
 
@@ -125,13 +131,14 @@ void ProcessIndividual_Node(xmlNodePtr node, htmlDocPtr doc) {
     // context node is current node.
     context->node = node;
 
-    // XPath to extract the product name from the 'title' attribute of the <a>
-    // tag
-    std::string nameXPath = ".//a/@title";
+    // XPath to extract the product name.
+    std::string nameXPath = NAME_PATH;
 
-    // XPath to extract the price from the 'aria-label' attribute of the <span>
-    // with class 'sr-only'
-    std::string priceXPath = ".//span[@class='sr-only']/@aria-label";
+    // XPath to extract the price.
+    std::string priceXPath = PRICE_PATH;
+
+    // XPatht o extract link.
+    std::string linkXPath = LINK_PATH;
 
     // Evaluate the XPath expression.
     xmlXPathObjectPtr nameNodes = xmlXPathEvalExpression(
@@ -166,10 +173,18 @@ void ProcessIndividual_Node(xmlNodePtr node, htmlDocPtr doc) {
     }
     xmlXPathFreeObject(priceNodes);
 
+    xmlXPathObjectPtr linkNodes = xmlXPathEvalExpression(
+        reinterpret_cast<const xmlChar*>(linkXPath.c_str()), context);
+    std::string link = "N/A";
+    if (linkNodes != NULL && linkNodes->nodesetval->nodeNr > 0) {
+        xmlNodePtr linkAttrNode = linkNodes->nodesetval->nodeTab[0];
+        link = getNodeContent(linkAttrNode);
+    }
     // Clean up the XPath context
     xmlXPathFreeContext(context);
 
-    std::cout << ProductName << "   " << productPrice << std::endl;
+    std::cout << ProductName << "   " << productPrice << "      "
+              << PREFIX + link << std::endl;
 }
 
 void ProcessNodes(xmlXPathObjectPtr Objects, htmlDocPtr doc) {
@@ -194,6 +209,7 @@ int XMLParsed(htmlDocPtr doc) {
     // Create a context for our doc. This is done so we can query XML into this
     // specific file.
     xmlXPathContextPtr context = xmlXPathNewContext(doc);
+
     if (context == NULL) {
         std::cerr << "Couldn't create a context" << std::endl;
         xmlFreeDoc(doc);
@@ -206,8 +222,7 @@ int XMLParsed(htmlDocPtr doc) {
     //     "line-clamp_active__5Qc2L "
     //     "title_lineclamp__kjrFA')]";
 
-    std::string xpathExpr =
-        "//*[contains(@class, 'product-card-portrait_root__ZiRpZ')]";
+    std::string xpathExpr = "//*[contains(@class, '" PRODUCT_MASTER_DIV "')]";
 
     // xpathObj contains the node that match the query
     xmlXPathObjectPtr xpathObj = xmlXPathEvalExpression(
@@ -219,6 +234,7 @@ int XMLParsed(htmlDocPtr doc) {
         xmlFreeDoc(doc);
         return -1;
     }
+
     ProcessNodes(xpathObj, doc);
 
     // free the Xpath object after processing
