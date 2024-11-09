@@ -1,3 +1,0 @@
-/home/ziaad/code/c++-web-scraper/build/CMakeFiles/scraper.dir
-/home/ziaad/code/c++-web-scraper/build/CMakeFiles/edit_cache.dir
-/home/ziaad/code/c++-web-scraper/build/CMakeFiles/rebuild_cache.dir

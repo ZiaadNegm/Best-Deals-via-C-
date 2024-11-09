@@ -1,0 +1,104 @@
+# =====================================
+# C++ Project Ignored Files
+# =====================================
+
+# Build directories
+build/
+
+# CMake generated files
+CMakeFiles/
+CMakeCache.txt
+Makefile
+cmake_install.cmake
+CTestTestfile.cmake
+
+# Compiled object files
+*.o
+*.obj
+
+# Executables
+*.exe
+*.out
+*.app
+
+# Temporary files
+*.dSYM/
+*.stackdump
+
+# =====================================
+# Node.js Project Ignored Files
+# =====================================
+
+# Node modules
+core/node_modules/
+
+# Vite build output
+core/dist/
+
+# Vite cache
+core/.vite/
+
+# TypeScript build info
+core/config/*.tsbuildinfo
+
+# Environment variables
+core/.env*
+core/public/.env*
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# Dependency directories
+jspm_packages/
+
+# Optional npm cache directory
+.npm/
+
+# ESLint cache
+core/.eslintcache
+
+# Stylelint cache
+core/.stylelintcache
+
+# Optional REPL history
+.node_repl_history
+
+# Output directories
+core/dist/
+core/build/
+
+# IDE directories and files
+.vscode/
+.idea/
+*.suo
+*.ntvs* 
+*.njsproj
+*.sln
+
+# OS generated files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+
+# =====================================
+# Other Ignored Files
+# =====================================
+
+# Temporary files
+*.swp
+*.swo
+*.tmp
+
+# =====================================
+# Additions specific to your project
+# =====================================
+
+# Dist directory (if present in root)
+dist/
+
+# Vite cache directory (if present in root)
+.vite/

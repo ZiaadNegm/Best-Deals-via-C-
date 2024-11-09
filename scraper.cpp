@@ -6,6 +6,7 @@
 #include <ctime>
 #include <fstream>
 #include <iostream>
+#include <nlohmann/json.hpp>
 #include <vector>
 
 #define BASE_URL "https://www.ah.nl/shop/prijsfavorieten"
@@ -17,12 +18,17 @@
 #define LINK_PATH ".//a/@href"
 #define PICTURE_LINK_PATH ".//img/@src"
 
+using json = nlohmann::json;
+
 struct ProductData {
     std::string name;
     std::string price;
     std::string link;
     std::string pictureLink;
+    NLOHMANN_DEFINE_TYPE_INTRUSIVE(ProductData, name, price, link, pictureLink)
 };
+
+// Correct placement of the macro outside the struct
 
 // Struct to hold compiled XPath expressions
 struct CompiledXPathExpressions {
@@ -96,7 +102,8 @@ std::string GetCompiledXPathContent(xmlXPathContextPtr context,
 
 // Process individual node
 void ProcessIndividual_Node(xmlNodePtr node, xmlXPathContextPtr context,
-                            CompiledXPathExpressions& compiledExprs) {
+                            CompiledXPathExpressions& compiledExprs,
+                            std::vector<ProductData>& TotalProduct_Data) {
     // Set the context node
     context->node = node;
 
@@ -129,40 +136,42 @@ void ProcessIndividual_Node(xmlNodePtr node, xmlXPathContextPtr context,
     product.pictureLink =
         GetCompiledXPathContent(context, compiledExprs.pictureLinkExpr);
 
-    // Output the extracted information
-    std::cout << "Name: " << product.name << std::endl;
-    std::cout << "Price: " << product.price << std::endl;
-    std::cout << "Link: " << product.link << std::endl;
-    std::cout << "Picture Link: " << product.pictureLink << std::endl;
-    std::cout << "-------------------------------------" << std::endl;
+    // Add the product to the list
+    TotalProduct_Data.push_back(product);
 }
 
 // Process the nodes returned by the XPath expression
-void ProcessNodes(xmlXPathObjectPtr xpathObj, xmlXPathContextPtr context,
+json ProcessNodes(xmlXPathObjectPtr xpathObj, xmlXPathContextPtr context,
                   CompiledXPathExpressions& compiledExprs) {
     xmlNodeSetPtr nodes = xpathObj->nodesetval;
 
+    std::vector<ProductData> TotalProduct_Data;
     if (nodes != nullptr) {
         std::cout << "Found " << nodes->nodeNr << " products." << std::endl;
         for (int i = 0; i < nodes->nodeNr; ++i) {
             xmlNodePtr node = nodes->nodeTab[i];
             if (node != nullptr) {
-                ProcessIndividual_Node(node, context, compiledExprs);
+                ProcessIndividual_Node(node, context, compiledExprs,
+                                       TotalProduct_Data);
             }
         }
     } else {
         std::cout << "No matching nodes found." << std::endl;
     }
+    json j_products = TotalProduct_Data;
+    return j_products;
 }
 
 // Main function to parse the HTML document and extract data
-int XMLParsed(htmlDocPtr doc) {
+json XMLParsed(htmlDocPtr doc) {
     // Create a single XPath context
     xmlXPathContextPtr context = xmlXPathNewContext(doc);
     if (context == nullptr) {
         std::cerr << "Couldn't create an XPath context." << std::endl;
         xmlFreeDoc(doc);
-        return -1;
+        json errorResult;
+        errorResult["error"] = "Couldn't create an XPath context.";
+        return errorResult;
     }
 
     // XPath expression to select product cards
@@ -177,7 +186,9 @@ int XMLParsed(htmlDocPtr doc) {
                   << std::endl;
         xmlXPathFreeContext(context);
         xmlFreeDoc(doc);
-        return -1;
+        json errorResult;
+        errorResult["error"] = "Could not evaluate XPath expression.";
+        return errorResult;
     }
 
     // Compile XPath expressions for product details
@@ -204,11 +215,13 @@ int XMLParsed(htmlDocPtr doc) {
         xmlXPathFreeObject(xpathObj);
         xmlXPathFreeContext(context);
         xmlFreeDoc(doc);
-        return -1;
+        json errorResult;
+        errorResult["error"] = "Failed to compile XPath expressions.";
+        return errorResult;
     }
 
     // Process the nodes
-    ProcessNodes(xpathObj, context, compiledExprs);
+    json JSON_Products = ProcessNodes(xpathObj, context, compiledExprs);
 
     // Free compiled XPath expressions
     xmlXPathFreeCompExpr(compiledExprs.nameExpr);
@@ -223,14 +236,30 @@ int XMLParsed(htmlDocPtr doc) {
     // Free the document
     xmlFreeDoc(doc);
 
-    return 0;
+    return JSON_Products;
 }
 
 // Function to retrieve and initialize data
 void Retrieve_And_Initialize_Data() {
     htmlDocPtr doc = RetrieveHTMLPage();
     if (doc != nullptr) {
-        XMLParsed(doc);
+        json result = XMLParsed(doc);
+        if (result.contains("error")) {
+            std::cerr << "Error: " << result["error"] << std::endl;
+        } else {
+            // Output the JSON to console
+            std::cout << result.dump(4) << std::endl;
+
+            // Write JSON to file
+            std::ofstream outFile("products.json");
+            if (outFile.is_open()) {
+                outFile << result.dump(4);
+                outFile.close();
+            } else {
+                std::cerr << "Failed to open output file for writing."
+                          << std::endl;
+            }
+        }
     }
 }
 
