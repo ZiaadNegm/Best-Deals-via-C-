@@ -1,8 +1,9 @@
-// src/App.js
+// src/App.tsx
+
 import React from 'react';
-import './App.css';
+import './App.css'; // Tailwind directives
 import ParticleBackground from './style/css-particle-animation-no-javascript/ParticleBackground';
-import MainPage from './pages/mainPage/core_mainPage'
+import MainPage from './pages/mainPage/core_mainPage';
 
 function App() {
   return (

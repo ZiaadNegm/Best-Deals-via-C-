@@ -5,6 +5,7 @@ function AreaBar(){
         <input
          type = "text"
          placeholder="Area"
+         className='rounded_full_bars'
          ></input>
     )
 }
