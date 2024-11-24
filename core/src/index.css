@@ -1,5 +1,6 @@
 @import './pages/mainPage/styling/core_mainPage.css';
 @import './components/sharedFilters/styling/sharedComponents.css';
+@import './pages/errorPage/errorPage.css'
 
 @tailwind base;
 @tailwind components;

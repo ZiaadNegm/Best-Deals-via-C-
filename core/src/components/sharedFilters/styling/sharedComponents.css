@@ -1,8 +1,8 @@
 @layer components {
     .rounded_full_bars {
-        @apply w-full px-4 py-2 border rounded;
+        @apply w-full px-6 py-3 border rounded-full text-white;
     }
-    .absolute_bottom_right{
-        @apply absolute bottom-0 right-0;
+    .absolute_bottom_right {
+        @apply absolute bottom-4 right-4;
     }
 }

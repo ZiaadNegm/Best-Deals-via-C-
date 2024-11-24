@@ -1,0 +1,11 @@
+@layer components{
+    .center{
+        @apply h-screen flex flex-col items-center justify-center
+    }
+    .text_color_big{
+        @apply text-white text-3xl
+    }
+    .text_color_smaller{
+        @apply text-white text-xl mt-11
+    }
+}

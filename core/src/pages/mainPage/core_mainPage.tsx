@@ -15,7 +15,7 @@ function MainPage() {
         <MinMax />
         <SearchFilter />
       </div>
-        <div className="absolute_bottom_right bg-white">
+        <div className="absolute_bottom_right text-white">
             <Submit />
             </div>
     </div>
