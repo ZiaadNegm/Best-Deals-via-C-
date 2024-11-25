@@ -1,15 +1,12 @@
 // config/tailwind.config.js
 
-const path = require('path');
-
-/** @type {import('tailwindcss').Config} */
-module.exports = {
+export default {
   content: [
-    path.resolve(__dirname, '../index.html'), // Adjusted path
-    path.resolve(__dirname, '../src/**/*.{js,ts,jsx,tsx}'), // Adjusted path
+    './index.html',
+    './src/**/*.{js,jsx,ts,tsx,html,css}',
   ],
   theme: {
     extend: {},
   },
   plugins: [],
-}
+};

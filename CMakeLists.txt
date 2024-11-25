@@ -1,15 +1,12 @@
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-
 cmake_minimum_required(VERSION 3.15)
 
-# Use vcpkg toolchain
-set(CMAKE_TOOLCHAIN_FILE "/home/ziaad/vcpkg/scripts/buildsystems/vcpkg.cmake" CACHE STRING "Vcpkg toolchain file")
-set(CMAKE_C_COMPILER "/usr/bin/gcc")
-set(CMAKE_CXX_COMPILER "/usr/bin/g++")
+# Enable vcpkg manifest mode
+set(VCPKG_FEATURE_FLAGS "manifests")
 
+# Specify the vcpkg toolchain file
+set(CMAKE_TOOLCHAIN_FILE "/home/ziaad/vcpkg/scripts/buildsystems/vcpkg.cmake" CACHE STRING "Vcpkg toolchain file")
 
 project(CppWebScraper)
-
 
 # Set C++ standard
 set(CMAKE_CXX_STANDARD 17)
