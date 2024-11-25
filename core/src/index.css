@@ -1,17 +1,18 @@
+@import './pages/resultsPage/styling/item.css' layer(components);
+@import './components/sharedFilters/styling/sharedComponents.css' layer(components);
+@import './pages/errorPage/errorPage.css' layer(components);
+@import './pages/resultsPage/styling/header.css' layer(components);
+@import './pages/mainPage/styling/core_mainPage.css' layer(components);
 
-@import './pages/resultsPage/styling/item.css'
-@import './pages/mainPage/styling/core_mainPage.css';
-@import './components/sharedFilters/styling/sharedComponents.css';
-@import './pages/errorPage/errorPage.css'
-@import './pages/resultsPage/styling/header.css'
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* Your custom styles */
 html, body {
     /* Ensure overflow is not set to hidden */
     overflow: visible;
-  }
+}
 
 /* Min-Max.css */
 .no-spinners {

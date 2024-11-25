@@ -5,11 +5,12 @@ import AreaBar from '../../components/sharedFilters/AreaBar';
 import MinMax from '../../components/sharedFilters/Min-Max';
 import SearchFilter from '../../components/sharedFilters/SearchFilter';
 import Submit from '../../components/sharedFilters/submit';
+import './styling/core_mainPage.css';
 
 function MainPage() {
   return (
     <div className="parent_div">
-      <div className="total_div">
+    <div className="total_div">
         <SearchBar />
         <AreaBar />
         <MinMax />

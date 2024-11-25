@@ -1,8 +1,6 @@
-@layer components {
-    .total_div {
-      @apply w-1/2 flex flex-col gap-0.5;
-    }
-    .parent_div {
-      @apply flex justify-center items-center min-h-screen;
-    }
-  }
+.total_div {
+  @apply w-1/2 flex flex-col gap-0.5;
+}
+.parent_div {
+  @apply flex justify-center items-center min-h-screen;
+}
