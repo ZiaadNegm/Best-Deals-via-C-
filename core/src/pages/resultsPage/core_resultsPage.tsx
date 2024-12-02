@@ -18,6 +18,5 @@ export default function ResultsPage(){
                 <ResultItem/>
             </div>
         </div>
-        /* Here load all the requests. */
      )
 }

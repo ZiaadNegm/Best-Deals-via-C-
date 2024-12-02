@@ -11,9 +11,9 @@ export default function ResultItem() {
 
   return (
     <div className="result-item">
-      <div className="picture-frame relative">
-        <div className="text-center mb-4">
-          <div className="inline-flex items-center justify-center bg-black shadow-md bg-opacity-50 text-white px-2 py-1 rounded">
+      <div className="picture-frame">
+        <div className="center-indicator">
+          <div className="slide-indicator">
             {currentSlide + 1} / {images.length}
           </div>
         </div>
@@ -23,24 +23,24 @@ export default function ResultItem() {
         >
           {images.map((image, index) => (
             <div key={index}>
-              <img src={image} className="image h-full w-full" alt={`Slide ${index + 1}`} />
+              <img src={image} className="image" alt={`Slide ${index + 1}`} />
             </div>
           ))}
         </Slide>
-        <div className="grid grid-cols-2 grid-rows-2 h-full w-full">
-          <div className="row-start-1 col-start-1 border border-gray-300 p-4 flex items-center justify-center">
-              <p className="text-5xl font-semibold">Price</p>
+        <div className="result-information">
+          <div className="info-block price-block">
+            <p className="info-text">Price</p>
           </div>
-          <div className="row-start-1 col-start-2 border border-gray-300 p-4 flex items-center justify-center">
-              <p className="text-5xl font-semibold">Score</p>
+          <div className="info-block score-block">
+            <p className="info-text">Score</p>
           </div>
-          <div className="row-start-2 col-start-1 border border-gray-300 p-4 flex items-center justify-center">
-              <p className="text-5xl font-semibold mb-8">Location</p>
+          <div className="info-block location-block">
+            <p className="info-text">Location</p>
           </div>
-          <div className="row-start-2 col-start-2 border border-gray-300 p-4 flex items-center justify-center">
-              <p className="text-5xl font-semibold mb-8">Offer</p>
+          <div className="info-block offer-block">
+            <button className="offer-button">Offer</button>
           </div>
-        </div>
+      </div>
 
       </div>
     </div>

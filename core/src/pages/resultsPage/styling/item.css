@@ -8,15 +8,53 @@
     }
   
     .image {
-      @apply w-full h-48 object-cover;
+      @apply object-cover;
     }
-  
-    .info {
-      @apply mt-2;
+
+    .center-indicator{
+      @apply text-center mb-4;
     }
-  
-    .price,
-    .score {
-      @apply text-gray-700;
+
+    .slide-indicator{
+      @apply inline-flex items-center justify-center bg-black shadow-md bg-opacity-50 text-white px-2 py-1 rounded;
     }
+
+    .result-information{
+      @apply grid grid-cols-2 grid-rows-2 h-full w-full
+    }
+
+      .info-block {
+    /* Common styles for all info blocks */
+    @apply border border-gray-300 p-4 flex items-center justify-center;
+  }
+
+  .price-block {
+    /* Specific positioning for the price block */
+    @apply row-start-1 col-start-1;
+  }
+
+  .score-block {
+    /* Specific positioning for the score block */
+    @apply row-start-1 col-start-2;
+  }
+
+  .location-block {
+    /* Specific positioning for the location block */
+    @apply row-start-2 col-start-1;
+  }
+
+  .offer-block {
+    /* Specific positioning for the offer block */
+    @apply row-start-2 col-start-2;
+  }
+
+  .info-text {
+    /* Text styling for the info text */
+    @apply text-5xl font-semibold;
+  }
+
+  .offer-button {
+    /* Styling for the offer button */
+    @apply text-5xl font-semibold rounded-full bg-gray-500 text-white px-4 py-2;
+  }
   }
