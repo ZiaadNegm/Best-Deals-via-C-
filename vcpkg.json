@@ -1,0 +1,10 @@
+{
+    "name": "cpp-web-scraper",
+    "version-string": "1.0.0",
+    "dependencies": [
+      "cpr",
+      "libxml2",
+      "nlohmann-json"
+    ]
+  }
+  

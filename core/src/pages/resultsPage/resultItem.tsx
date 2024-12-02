@@ -12,13 +12,11 @@ export default function ResultItem() {
   return (
     <div className="result-item">
       <div className="picture-frame relative">
-        {/* Center the slide indicator */}
         <div className="text-center mb-4">
           <div className="inline-flex items-center justify-center bg-black shadow-md bg-opacity-50 text-white px-2 py-1 rounded">
             {currentSlide + 1} / {images.length}
           </div>
         </div>
-        {/* Slideshow */}
         <Slide
           onChange={(oldIndex, newIndex) => setCurrentSlide(newIndex)}
           transitionDuration={500}
@@ -29,11 +27,21 @@ export default function ResultItem() {
             </div>
           ))}
         </Slide>
-        {/* Product Details */}
-        <div className="p-4">
-          <h3 className="text-lg font-semibold">Product Name</h3>
-          <p className="text-gray-600">Price: $XX.XX</p>
+        <div className="grid grid-cols-2 grid-rows-2 h-full w-full">
+          <div className="row-start-1 col-start-1 border border-gray-300 p-4 flex items-center justify-center">
+              <p className="text-5xl font-semibold">Price</p>
+          </div>
+          <div className="row-start-1 col-start-2 border border-gray-300 p-4 flex items-center justify-center">
+              <p className="text-5xl font-semibold">Score</p>
+          </div>
+          <div className="row-start-2 col-start-1 border border-gray-300 p-4 flex items-center justify-center">
+              <p className="text-5xl font-semibold mb-8">Location</p>
+          </div>
+          <div className="row-start-2 col-start-2 border border-gray-300 p-4 flex items-center justify-center">
+              <p className="text-5xl font-semibold mb-8">Offer</p>
+          </div>
         </div>
+
       </div>
     </div>
   );
