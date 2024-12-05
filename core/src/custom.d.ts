@@ -1,9 +1,9 @@
 // src/images.d.ts
 
 declare module '*.webp' {
-    const src: string;
-    export default src;
-  }
+  const value: string;
+  export default value;
+}
   
   declare module '*.svg' {
     import * as React from 'react';

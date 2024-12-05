@@ -10,6 +10,32 @@ type ResultItemProps = {
   id: number;
 };
 
+type PictureProps = {
+  images: string[];
+};
+
+export function Picture({ images }: PictureProps) {
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  return (
+    <div className="center-indicator">
+      <div className="slide-indicator">
+        {currentSlide + 1} / {images.length}
+      </div>
+      <Slide
+        onChange={(oldIndex, newIndex) => setCurrentSlide(newIndex)}
+        transitionDuration={500}
+      >
+        {images.map((image, index) => (
+          <div key={index}>
+            <img src={image} className="image" alt={`Slide ${index + 1}`} />
+          </div>
+        ))}
+      </Slide>
+    </div>
+  );
+}
+
 export default function ResultItem({ id }: ResultItemProps) {
   const [currentSlide, setCurrentSlide] = useState(0);
   const images = [Iphone, blackIphone];
@@ -17,22 +43,8 @@ export default function ResultItem({ id }: ResultItemProps) {
   return (
     <div className="result-item">
       <div className="picture-frame">
-        <Link to={`/item/${id}`}>
-          <div className="center-indicator">
-            <div className="slide-indicator">
-              {currentSlide + 1} / {images.length}
-            </div>
-            <Slide
-              onChange={(oldIndex, newIndex) => setCurrentSlide(newIndex)}
-              transitionDuration={500}
-            >
-              {images.map((image, index) => (
-                <div key={index}>
-                  <img src={image} className="image" alt={`Slide ${index + 1}`} />
-                </div>
-              ))}
-            </Slide>
-          </div>
+      <Link to={`/item/${id}`}>
+          <Picture images={images} />
         </Link>
         <div className="result-information">
           <div className="info-block price-block">
