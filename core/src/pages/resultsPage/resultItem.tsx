@@ -4,29 +4,36 @@ import Iphone from './placeholder/iPhone_15_Blue_PDP_Image_Position-1_alt__en-IN
 import blackIphone from './placeholder/iPhone_16_Black_PDP_Image_Position_1b_Black_Color__TH-TH_1c13450b-b3a1-4534-8929-e142de60b150.webp';
 import 'react-slideshow-image/dist/styles.css';
 import { Slide } from 'react-slideshow-image';
+import { Link } from 'react-router-dom';
 
-export default function ResultItem() {
+type ResultItemProps = {
+  id: number;
+};
+
+export default function ResultItem({ id }: ResultItemProps) {
   const [currentSlide, setCurrentSlide] = useState(0);
   const images = [Iphone, blackIphone];
 
   return (
     <div className="result-item">
       <div className="picture-frame">
-        <div className="center-indicator">
-          <div className="slide-indicator">
-            {currentSlide + 1} / {images.length}
-          </div>
-        </div>
-        <Slide
-          onChange={(oldIndex, newIndex) => setCurrentSlide(newIndex)}
-          transitionDuration={500}
-        >
-          {images.map((image, index) => (
-            <div key={index}>
-              <img src={image} className="image" alt={`Slide ${index + 1}`} />
+        <Link to={`/item/${id}`}>
+          <div className="center-indicator">
+            <div className="slide-indicator">
+              {currentSlide + 1} / {images.length}
             </div>
-          ))}
-        </Slide>
+            <Slide
+              onChange={(oldIndex, newIndex) => setCurrentSlide(newIndex)}
+              transitionDuration={500}
+            >
+              {images.map((image, index) => (
+                <div key={index}>
+                  <img src={image} className="image" alt={`Slide ${index + 1}`} />
+                </div>
+              ))}
+            </Slide>
+          </div>
+        </Link>
         <div className="result-information">
           <div className="info-block price-block">
             <p className="info-text">Price</p>
@@ -40,8 +47,7 @@ export default function ResultItem() {
           <div className="info-block offer-block">
             <button className="offer-button">Offer</button>
           </div>
-      </div>
-
+        </div>
       </div>
     </div>
   );

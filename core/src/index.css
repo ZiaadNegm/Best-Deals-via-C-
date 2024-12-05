@@ -3,6 +3,7 @@
 @import './pages/errorPage/errorPage.css' layer(components);
 @import './pages/resultsPage/styling/header.css' layer(components);
 @import './pages/mainPage/styling/core_mainPage.css' layer(components);
+@import './pages/individualPage/styling/individualPage.css' layer(components);
 
 @tailwind base;
 @tailwind components;
