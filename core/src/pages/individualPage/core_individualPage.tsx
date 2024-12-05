@@ -56,7 +56,8 @@ export default function IndividualPage() {
   const priceValue = "";
   const estWorthValue = "€200"; 
   const reviewsValue = "";
-
+  const location = "";
+  const desc = "";
   return (
     <div>
       <Header />
@@ -66,13 +67,16 @@ export default function IndividualPage() {
             <Picture id={numericId} images={images} />
           </div>
         </div>
-
-        <div className="flex flex-col space-y-4 p-4">
+        <div className="col-start-2 row-start-1 flex flex-col space-y-4 p-4">
           <Pill placeholder="Original Link:" value={originalLinkValue} />
           <Pill placeholder="Score:" value={scoreValue} />
           <Pill placeholder="Price:" value={priceValue} />
           <Pill placeholder="Est worth:" value={estWorthValue} />
           <Pill placeholder="Reviews:" value={reviewsValue} />
+        </div>
+        <div className='col-start-1 row-start-2 flex flex-col space-y-4 p-4'>
+            <Pill placeholder='Location' value={location} />
+            <Pill placeholder='Desc' value={desc} /> 
         </div>
       </div>
     </div>
