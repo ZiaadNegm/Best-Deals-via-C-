@@ -1,0 +1,19 @@
+@layer components{
+    .grid-2x1_2x1Grid {
+        @apply grid h-screen w-full;
+        grid-template-columns: 2fr 1fr;
+        grid-template-rows: 2fr 1fr;
+    }
+    .grid-1x2Grid {
+        @apply grid;
+        grid-template-columns: 3fr auto;
+      }
+    
+      
+    .Surround{
+        @apply border border-gray-500;
+    }
+    .text-place{
+        @apply text-6xl text-white
+    }
+}
